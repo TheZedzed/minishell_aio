@@ -1,0 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/30 18:56:40 by azeraoul          #+#    #+#             */
+/*   Updated: 2021/08/29 16:57:17 by azeraoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PARSER_UTILS_H
+# define PARSER_UTILS_H
+
+# include "lexing.h"
+# include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <errno.h>
+
+typedef struct s_ast
+{
+	int		type;
+	void	*item;
+}t_ast;
+
+typedef struct s_cmd
+{
+	void	*redir;
+	void	*words;
+	void	*assign;
+}t_cmd;
+
+typedef struct s_connection
+{
+	t_ast	*left;
+	t_ast	*right;
+}t_connection;
+
+typedef struct s_pipeline
+{
+	t_list	*pipe_sequence;
+}t_pipeline;
+
+typedef struct s_ainsi
+{
+	char	*name;
+	int		value;
+}t_ainsi;
+
+enum {OR, SUB, CMD, AND, PIPE
+};
+
+typedef struct stat	t_stat;
+typedef void	(t_exec)(void *,t_var **, int *);
+#endif

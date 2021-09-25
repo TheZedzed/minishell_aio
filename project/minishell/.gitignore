@@ -1,0 +1,14 @@
+libft/*.o
+libft/*.a
+srcs/lexer/*.o
+srcs/parser/*.o
+srcs/lexer/debug/*.o
+srcs/lexer/lexer_err/*.o
+srcs/lexer/utils/*.o
+srcs/parser/ast/*.o
+srcs/parser/builtin/*.o
+srcs/parser/cmd/*.o
+srcs/parser/env/*.o
+srcs/parser/exec/*.o
+srcs/parser/utils/*.o
+minishell
