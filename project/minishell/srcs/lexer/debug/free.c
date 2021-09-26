@@ -14,7 +14,7 @@
 
 void	manage_heap(int type, void *addr)
 {
-	static t_list	*heap;
+	static t_list	*heap = NULL;
 	t_list			*new;
 
 	if (type == END)

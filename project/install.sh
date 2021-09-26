@@ -1,4 +1,4 @@
 #!/bin/sh
 cd minishell
-make bonus 
+make re 
 valgrind ./minishell

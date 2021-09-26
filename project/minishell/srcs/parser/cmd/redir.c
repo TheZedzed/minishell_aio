@@ -12,31 +12,6 @@
 
 #include "parsing.h"
 
-static void	heredoc(char *file, char *delim, int *stream)
-{
-	int		fd;
-	int		res;
-	char	*line;
-
-	fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0660);
-	while (42)
-	{
-		res = get_next_line(STDIN_FILENO, &line);
-		if (!res || !ft_strcmp(line, delim))
-		{
-			free(line);
-			break ;
-		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
-	close(fd);
-	fd = open(file, O_CLOEXEC | O_RDONLY);
-	unlink(file);
-	stream[0] = fd;
-}
-
 static void	apply_(char *type, char *file, int *stream, int *err)
 {
 	int	std;
@@ -97,10 +72,10 @@ int	make_redir(t_tokens *list, t_var *vars, int *new, int *old)
 	if (red)
 	{
 		i = 0;
-		while (!err && red[i])
+		while (red[i])
 		{
 			if (!ft_strncmp(red[i], "<<", 2))
-				heredoc("/tmp/thezedzed", &red[i][2], new);
+				heredoc(&red[i][2], new);
 			++i;
 		}
 		apply_redir(red, vars, new, &err);

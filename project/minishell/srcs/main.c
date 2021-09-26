@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:44:46 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/08/19 22:17:22 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/09/26 13:53:19 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static void	lexing(t_tokens **token, t_var **vars)
 			tokenizer(token, line);
 			syntax(token, vars);
 			syntaxb(token, vars);
+            setstdin(*token);
 		}
 	}
 }
@@ -74,8 +75,8 @@ int	main(int ac, char **av, char **env)
 	t_tokens	*token;
 	t_var		*vars;
 
-	ac = ac;
-	av = av;
+	(void)ac;
+	(void)av;
 	vars = NULL;
 	create_vars(&vars, env);
 	signal(SIGINT, handler);

@@ -44,7 +44,7 @@ static int	lexe_dollar(char **beg, int *len)
 		*beg += 2;
 	else
 	{
-		while (*(++*beg) && !special(**beg))
+		while (*(++*beg) && posix_(**beg))
 			;
 	}
 	*len = *beg - ptr;

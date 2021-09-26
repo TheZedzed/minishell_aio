@@ -83,6 +83,7 @@ void	exec_cmd(void *todo, t_var **vars, int *stream)
 	{
 		if (!builtin_(cmd, vars, new, &err))
 		{
+            printf("%d\n", new[0]);
 			dup2(new[0], STDIN_FILENO);
 			dup2(new[1], STDOUT_FILENO);
 			if (**cmd && **cmd != 0x2f)

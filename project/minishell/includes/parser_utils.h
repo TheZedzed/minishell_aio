@@ -17,7 +17,6 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <sys/stat.h>
-# include <fcntl.h>
 # include <errno.h>
 
 typedef struct s_ast
@@ -54,5 +53,5 @@ enum {OR, SUB, CMD, AND, PIPE
 };
 
 typedef struct stat	t_stat;
-typedef void	(t_exec)(void *,t_var **, int *);
+typedef void	(t_exec)(void *, t_var **, int *);
 #endif
