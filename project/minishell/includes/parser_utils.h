@@ -27,6 +27,7 @@ typedef struct s_ast
 
 typedef struct s_cmd
 {
+	int		heredoc;
 	void	*redir;
 	void	*words;
 	void	*assign;

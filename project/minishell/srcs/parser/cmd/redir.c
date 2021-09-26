@@ -12,7 +12,7 @@
 
 #include "parsing.h"
 
-static void	apply_(char *type, char *file, int *stream, int *err)
+static void	simple_(char *type, char *file, int *stream, int *err)
 {
 	int	std;
 	int	fd;
@@ -30,7 +30,57 @@ static void	apply_(char *type, char *file, int *stream, int *err)
 		stream[std] = fd;
 }
 
-static void	apply_redir(char **redir, t_var *vars, int *stream, int *err)
+static void	read_(char *file, char *delim, int *fd)
+{
+	char	*line;
+	int		res;
+
+	*fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0660);
+	while (42)
+	{
+		res = get_next_line(STDIN_FILENO, &line);
+		if (!res || !ft_strcmp(line, delim))
+		{
+			free(line);
+			break ;
+		}
+		write(*fd, line, ft_strlen(line));
+		write(*fd, "\n", 1);
+		free(line);
+	}
+	close(*fd);
+	*fd = open(file, O_CLOEXEC | O_RDONLY);
+	unlink(file);
+}
+
+void	heredoc_(t_cmd *cmd)
+{
+	static char	file[9] = "/tmp/`aa\0";
+	t_tokens	*redir;
+	int			i;
+
+	redir = (t_tokens *)cmd->redir;
+	while (redir)
+	{
+		if (!ft_strcmp(redir->word, "<<"))
+		{
+			i = -1;
+			while (++i < 3)
+			{
+				if (ft_isalpha(file[i + 5] + 1))
+				{
+					++file[i + 5];
+					break ;
+				}
+			}
+			redir = redir->next;
+			read_(file, redir->word, &cmd->heredoc);
+		}
+		redir = redir->next;
+	}
+}
+
+static void	apply_(char **redir, t_var *vars, int *stream, int *err)
 {
 	t_tokens	*curr;
 	char		*file;
@@ -54,31 +104,25 @@ static void	apply_redir(char **redir, t_var *vars, int *stream, int *err)
 				write(2, ": ambigous redirect\n", 20);
 			}
 			else
-				apply_(redir[i], curr->word, stream, err);
+				simple_(redir[i], curr->word, stream, err);
 		}
 	}
 }
 
-int	make_redir(t_tokens *list, t_var *vars, int *new, int *old)
+char	make_redir(t_cmd *cmd, t_var *vars, int *new, int *old)
 {
 	char	**red;
 	int		err;
-	int		i;
 
 	err = 0;
+	if (cmd->heredoc > 0)
+		old[0] = cmd->heredoc;
 	new[0] = old[0];
 	new[1] = old[1];
-	red = cmd_words(list, vars, 0);
+	red = cmd_words(cmd->redir, vars, 0);
 	if (red)
-	{
-		i = 0;
-		while (red[i])
-		{
-			if (!ft_strncmp(red[i], "<<", 2))
-				heredoc(&red[i][2], new);
-			++i;
-		}
-		apply_redir(red, vars, new, &err);
-	}
-	return (err);
+		apply_(red, vars, new, &err);
+	else
+		err = 1;
+	return (err + '0');
 }

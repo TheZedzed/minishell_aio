@@ -40,10 +40,8 @@ void	syntaxb(t_tokens **token, t_var **vars);
 /*
 **	UTILS
 */
-int     posix_(char c);
+int		posix_(char c);
 void	handler(int sig);
-void    setstdin(t_tokens *token);
-void    heredoc(char *delim, int *stream);
 void	manage_heap(int type, void *addr);
 void	push_token(t_tokens **head, t_tokens *new);
 void	update_var(t_var **head, char *name, char *value, int scope);

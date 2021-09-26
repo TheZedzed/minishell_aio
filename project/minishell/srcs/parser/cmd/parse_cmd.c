@@ -100,6 +100,7 @@ void	parse_cmd(t_tokens *seq, t_cmd **head)
 			else
 				push_words((t_tokens **)&new->words, &seq, next);
 		}
+		heredoc_(new);
 		(*head) = new;
 	}
 }

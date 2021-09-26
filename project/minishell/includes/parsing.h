@@ -27,12 +27,13 @@ t_connection	*connect(t_ast *left, t_ast *right);
 /*
 **	CMD
 */
+void			heredoc_(t_cmd *cmd);
 void			parse_cmd(t_tokens *seq, t_cmd **head);
 void			exec_cmd(void *todo, t_var **vars, int *in);
 void			executer(t_ast *todo, t_var **vars, int *in);
 char			**cmd_words(t_tokens *list, t_var *vars, int flag);
+char			make_redir(t_cmd *cmd, t_var *vars, int *new, int *old);
 void			pipex(t_list *cmds, t_var **vars, int size, int *stream);
-int				make_redir(t_tokens *list, t_var *vars, int *new, int *old);
 
 /*
 **	DEBUG

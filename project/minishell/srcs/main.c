@@ -65,7 +65,6 @@ static void	lexing(t_tokens **token, t_var **vars)
 			tokenizer(token, line);
 			syntax(token, vars);
 			syntaxb(token, vars);
-            setstdin(*token);
 		}
 	}
 }

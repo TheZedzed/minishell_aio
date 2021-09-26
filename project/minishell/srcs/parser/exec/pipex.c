@@ -68,7 +68,7 @@ static int	should_skip(t_ast *elem, int size, t_var **vars, int *stream)
 		{
 			if (!cmd->words || (cmd->words && is_blt(cmd->words)))
 			{
-				*err = make_redir(cmd->redir, *vars, new, stream) + '0';
+				*err = make_redir(cmd, *vars, new, stream);
 				if (!cmd->words && cmd->assign)
 					assign_(cmd->assign, vars, LOCAL);
 				else if (cmd->words && *err == '0')
