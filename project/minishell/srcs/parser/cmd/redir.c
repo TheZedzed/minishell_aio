@@ -115,14 +115,12 @@ char	make_redir(t_cmd *cmd, t_var *vars, int *new, int *old)
 	int		err;
 
 	err = 0;
-	if (cmd->heredoc > 0)
+	if (cmd->heredoc > 0 )
 		old[0] = cmd->heredoc;
 	new[0] = old[0];
 	new[1] = old[1];
 	red = cmd_words(cmd->redir, vars, 0);
 	if (red)
 		apply_(red, vars, new, &err);
-	else
-		err = 1;
 	return (err + '0');
 }

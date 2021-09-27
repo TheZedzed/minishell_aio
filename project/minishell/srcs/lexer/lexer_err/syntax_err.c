@@ -35,7 +35,7 @@ static int	unsupported(char *str)
 	return (res);
 }
 
-static void	err_msg(t_tokens *curr)
+static void	err_msg(t_tokens *curr, t_var **vars)
 {
 	char	*str;
 
@@ -55,6 +55,8 @@ static void	err_msg(t_tokens *curr)
 		printf("error -- unclosed: [%s]\n", str);
 	else if (g_err == FEATURE)
 		printf("error -- feature not supported near token `%s'\n", str);
+    if (g_err)
+        update_var(vars, "?", "2", LOCAL);
 }
 
 static void	syntax_cntrl(t_tokens *curr, t_tokens *prev)
@@ -107,10 +109,8 @@ void	syntax(t_tokens **token, t_var **vars)
 		if (curr->type != BLANK)
 			prev = curr;
 		if (g_err)
-			err_msg(curr);
+			err_msg(curr, vars);
 		else
 			curr = curr->next;
 	}
-	if (g_err)
-		update_var(vars, "?", "2", LOCAL);
 }
