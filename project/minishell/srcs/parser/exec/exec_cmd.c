@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/01 23:11:47 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/08/01 23:11:50 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/10/01 18:36:40 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	exec_cmd(void *todo, t_var **vars, int *stream)
 	{
 		if (!builtin_(cmd, vars, new, &err))
 		{
-            dup2(new[0], STDIN_FILENO);
+			dup2(new[0], STDIN_FILENO);
 			dup2(new[1], STDOUT_FILENO);
 			if (**cmd && **cmd != 0x2f && search_var(*vars, "PATH"))
 				search_path(cmd, search_var(*vars, "PATH")->value);

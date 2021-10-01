@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:44:25 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/09/25 16:17:06 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/10/01 18:37:08 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ static void	err_msg(t_tokens *curr, t_var **vars)
 		printf("error -- unclosed: [%s]\n", str);
 	else if (g_err == FEATURE)
 		printf("error -- feature not supported near token `%s'\n", str);
-    if (g_err)
-        update_var(vars, "?", "2", LOCAL);
+	if (g_err)
+		update_var(vars, "?", "2", LOCAL);
 }
 
 static void	syntax_cntrl(t_tokens *curr, t_tokens *prev)

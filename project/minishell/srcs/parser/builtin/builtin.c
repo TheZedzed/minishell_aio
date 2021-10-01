@@ -20,7 +20,7 @@ int	exit_(char *value)
 	if (value)
 		res = ft_atoi(value);
 	manage_heap(END, NULL);
-	exit(res);
+	exit(res % 256);
 }
 
 int	echo_(char **cmd, int *stream)
@@ -49,16 +49,19 @@ int	echo_(char **cmd, int *stream)
 
 int	pwd_(t_var **vars, int *stream, char *err)
 {
-	char	*res;
+	t_var	*res;
 
-	res = search_var(*vars, "PWD")->value;
+	res = search_var(*vars, "PWD");
 	if (res)
 	{
-		write(stream[1], res, ft_strlen(res));
+		write(stream[1], res->value, ft_strlen(res->value));
 		write(stream[1], "\n", 1);
 	}
 	else
+	{
+		write(2, "PWD not set\n", 12);
 		*err = '1';
+	}
 	return (1);
 }
 
@@ -66,20 +69,20 @@ int	unset_(char **cmd, t_var **vars)
 {
 	t_var	*prev;
 	t_var	*curr;
-	char	*name;
+	int		i;
 
-	name = *cmd;
-	while (*name)
+	i = 0;
+	while (cmd[i])
 	{
 		curr = *vars;
-		while (curr && ft_strcmp(curr->name, name))
+		while (curr && ft_strcmp(curr->name, cmd[i]))
 		{
 			prev = curr;
 			curr = curr->next;
 		}
 		if (curr)
 			prev->next = curr->next;
-		++name;
+		++i;
 	}
 	return (1);
 }
