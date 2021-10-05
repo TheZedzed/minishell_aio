@@ -17,7 +17,6 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <sys/stat.h>
-# include <fcntl.h>
 # include <errno.h>
 
 typedef struct s_ast
@@ -28,6 +27,7 @@ typedef struct s_ast
 
 typedef struct s_cmd
 {
+	int		heredoc;
 	void	*redir;
 	void	*words;
 	void	*assign;
@@ -54,5 +54,5 @@ enum {OR, SUB, CMD, AND, PIPE,
 };
 
 typedef struct stat	t_stat;
-typedef void	(t_exec)(void *,t_var **, int *);
+typedef void	(t_exec)(void *, t_var **, int *);
 #endif

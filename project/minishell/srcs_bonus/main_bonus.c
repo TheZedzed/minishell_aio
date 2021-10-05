@@ -74,8 +74,8 @@ int	main(int ac, char **av, char **env)
 	t_tokens	*token;
 	t_var		*vars;
 
-	ac = ac;
-	av = av;
+	(void)ac;
+	(void)av;
 	vars = NULL;
 	create_vars(&vars, env);
 	signal(SIGINT, handler);
@@ -89,5 +89,6 @@ int	main(int ac, char **av, char **env)
 	}
 	g_err = ft_atoi(search_var(vars, "?")->value);
 	manage_heap(END, NULL);
+	write(2, "exit\n", 5);
 	return (g_err);
 }

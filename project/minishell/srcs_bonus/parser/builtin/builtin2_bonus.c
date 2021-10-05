@@ -14,55 +14,60 @@
 
 static void	save_oldpath(t_var **vars, char *buffer)
 {
-	char	*res;
+	char	*old;
 	int		len;
 
-	res = search_var(*vars, "PWD")->value;
-	len = ft_strlen(res);
-	ft_strcat(buffer, res);
+	ft_memset(buffer, 0, 256);
+	update_var(vars, "OLDPWD", getcwd(buffer, 256), GLOBAL);
+	old = search_var(*vars, "PWD")->value;
+	len = ft_strlen(old);
+	ft_memset(buffer, 0, 256);
+	ft_strcat(buffer, old);
 	while (len > 1 && buffer[--len] != '/')
 		buffer[len] = 0;
 	buffer[len] = 0;
 	update_var(vars, "PWD", buffer, GLOBAL);
+	chdir(buffer);
 }
 
-static void	go_path(t_var **vars, char *buffer, char *err)
+static void	go_path(t_var **vars, char *path, char *err)
 {
-	char	*new;
+	char	buffer[256];
 	char	*old;
 
-	new = search_var(*vars, "PWD")->value;
-	if (chdir(new))
+	if (!ft_strcmp(path, ".."))
+		save_oldpath(vars, buffer);
+	else if (chdir(path) && ++*err)
+		perror(path);
+	else
 	{
-		old = search_var(*vars, "OLDPWD")->value;
-		update_var(vars, "PWD", old, GLOBAL);
-		perror(new);
-		*err = '1';
-		return ;
+		ft_memset(buffer, 0, 256);
+		old = search_var(*vars, "PWD")->value;
+		update_var(vars, "OLDPWD", old, GLOBAL);
+		update_var(vars, "PWD", getcwd(buffer, 256), GLOBAL);
 	}
-	update_var(vars, "PWD", getcwd(buffer, 256), GLOBAL);
 }
 
 int	cd_(char *path, t_var **vars, char *err)
 {
-	char	buffer[256];
-	char	*pwd;
+	t_var	*pwd;
 
-	ft_memset(buffer, 0, 256);
-	update_var(vars, "OLDPWD", getcwd(buffer, 256), GLOBAL);
 	if (path)
 	{
-		pwd = search_var(*vars, "PWD")->value;
-		if (!ft_strcmp(path, "."))
-			update_var(vars, "OLDPWD", pwd, GLOBAL);
-		else if (!ft_strcmp(path, ".."))
-			save_oldpath(vars, buffer);
+		pwd = search_var(*vars, "PWD");
+		if (!pwd)
+			write(2, "PWD not set\n", 12);
+		else if (!ft_strcmp(path, "."))
+			update_var(vars, "OLDPWD", pwd->value, GLOBAL);
 		else
-			update_var(vars, "PWD", path, GLOBAL);
-		go_path(vars, buffer, err);
+			go_path(vars, path, err);
+		return (1);
 	}
+	pwd = search_var(*vars, "HOME");
+	if (pwd && !chdir(pwd->value))
+		update_var(vars, "PWD", pwd->value, GLOBAL);
 	else
-		update_var(vars, "PWD", search_var(*vars, "HOME")->value, GLOBAL);
+		write(2, "HOME not set\n", 13);
 	return (1);
 }
 

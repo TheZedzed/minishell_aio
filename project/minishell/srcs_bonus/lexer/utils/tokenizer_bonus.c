@@ -61,7 +61,7 @@ static void	length(char *beg, int *len)
 			ptr += 2;
 		else
 		{
-			while (*++ptr && !special(*ptr))
+			while (*++ptr && posix_(*ptr))
 				;
 		}
 	}

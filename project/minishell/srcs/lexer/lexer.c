@@ -17,7 +17,7 @@ static int	lexe_simple(char **beg, int *len)
 	char	*ptr;
 
 	ptr = *beg;
-	while (**beg && !special(**beg))
+	while (**beg && posix_(**beg))
 		++*beg;
 	*len = *beg - ptr;
 	return (lexer(beg, len));

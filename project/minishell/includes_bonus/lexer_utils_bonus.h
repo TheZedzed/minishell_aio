@@ -17,20 +17,19 @@
 # include <stdio.h>
 # include <signal.h>
 # include <dirent.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
 extern int	g_err;
 
-typedef struct s_tokens
-{
+typedef struct s_tokens {
 	int				type;
 	char			*word;
 	struct s_tokens	*next;
 }t_tokens;
 
-typedef struct s_var
-{
+typedef struct s_var {
 	int				scope;
 	char			*name;
 	char			*value;
@@ -42,6 +41,7 @@ enum {LOCAL, GLOBAL
 
 enum {BLANK, WORD, REDIR, CTRL1, CTRL2
 };
+
 enum {
 	SYNTAX = -4,
 	FEATURE = -3,

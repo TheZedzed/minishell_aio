@@ -78,14 +78,14 @@ void	exec_cmd(void *todo, t_var **vars, int *stream)
 
 	elem = todo;
 	cmd = elem->words;
-	err = make_redir(elem->redir, *vars, new, stream) + '0';
+	err = make_redir(elem, *vars, new, stream);
 	if (err == '0' && cmd)
 	{
 		if (!builtin_(cmd, vars, new, &err))
 		{
 			dup2(new[0], STDIN_FILENO);
 			dup2(new[1], STDOUT_FILENO);
-			if (**cmd && **cmd != 0x2f)
+			if (**cmd && **cmd != 0x2f && search_var(*vars, "PATH"))
 				search_path(cmd, search_var(*vars, "PATH")->value);
 			if (execve(cmd[0], cmd, update_env(*vars)))
 				not_found(cmd[0]);

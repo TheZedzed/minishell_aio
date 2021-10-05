@@ -40,6 +40,7 @@ void	syntaxb(t_tokens **token, t_var **vars);
 /*
 **	UTILS
 */
+int		posix_(char c);
 void	handler(int sig);
 void	manage_heap(int type, void *addr);
 void	push_token(t_tokens **head, t_tokens *new);
