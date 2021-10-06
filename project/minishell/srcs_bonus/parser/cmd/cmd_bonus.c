@@ -12,6 +12,18 @@
 
 #include "parsing_bonus.h"
 
+static int	stars_(char *str)
+{
+	if (*str)
+	{
+		while (*str && *str == 0x2a)
+			++str;
+		if (!*str)
+			return (1);
+	}
+	return (0);
+}
+
 static void	one(t_tokens **list, char **cmd, int *index)
 {
 	char		buffer[4096];
@@ -19,7 +31,7 @@ static void	one(t_tokens **list, char **cmd, int *index)
 
 	curr = (*list);
 	ft_memset(buffer, 0, 4096);
-	while (curr && curr->type != BLANK && ft_strcmp(curr->word, "*"))
+	while (curr && curr->type != BLANK && !stars_(curr->word))
 	{
 		ft_strcat(buffer, curr->word);
 		curr = curr->next;
@@ -67,7 +79,7 @@ static char	**new_cmd(t_tokens *list)
 	{
 		if (list->type == BLANK)
 			++size;
-		else if (!ft_strcmp(list->word, "*"))
+		else if (stars_(list->word))
 			reader(".", NULL, &size);
 		list = list->next;
 	}
@@ -90,7 +102,7 @@ char	**cmd_words(t_tokens *list, t_var *vars, int flag)
 		cmd = new_cmd(list);
 		while (list)
 		{
-			if (!ft_strcmp(list->word, "*"))
+			if (stars_(list->word))
 				reader(".", cmd, &i);
 			else
 				one(&list, cmd, &i);

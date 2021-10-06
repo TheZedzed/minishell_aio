@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:44:11 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/07/28 01:44:12 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/10/05 12:41:10 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	lexe_simple(char **beg, int *len)
 	char	*ptr;
 
 	ptr = *beg;
-	while (**beg && posix_(**beg))
+	while (**beg && !special(**beg))
 		++*beg;
 	*len = *beg - ptr;
 	return (lexer(beg, len));
