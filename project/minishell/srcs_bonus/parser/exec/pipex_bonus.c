@@ -25,6 +25,8 @@ static int	should_stop(t_list *cmds, int *pipefd, int *stream)
 		pipe(pipefd);
 		stream[1] = pipefd[1];
 	}
+	else
+		stream[1] = STDOUT_FILENO;
 	return (0);
 }
 

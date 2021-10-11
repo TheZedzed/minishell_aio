@@ -104,7 +104,7 @@ char	**cmd_words(t_tokens *list, t_var *vars, int flag)
 		{
 			if (stars_(list->word))
 				reader(".", cmd, &i);
-			else
+			else if (list->type != BLANK)
 				one(&list, cmd, &i);
 			if (list)
 				list = list->next;

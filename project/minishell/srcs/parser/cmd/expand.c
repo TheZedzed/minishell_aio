@@ -43,45 +43,47 @@ static void	quote_removal(char *str, int d)
 static void	simple_expand(t_tokens *token, t_var *vars, int flag)
 {
 	t_var	*res;
-	char	*word;
+	int		len;
 
-	word = token->word;
+	len = ft_strlen(token->word);
 	if (flag == 2)
-		res = search_var(vars, word + 1);
+		res = search_var(vars, token->word + 1);
 	else
 	{
-		word[ft_strlen(word) - 1] = 0;
-		res = search_var(vars, word + 2);
+		token->word[len - 1] = 0;
+		res = search_var(vars, token->word + 2);
 	}
 	if (res)
-		word = ft_strdup(res->value);
+		token->word = ft_strdup(res->value);
 	else
-		word = ft_strdup("");
-	manage_heap(CREATE_CMD, word);
-	quote_removal(word, word[0]);
-	token->word = word;
+		ft_memset(token->word, 0, len);
+	quote_removal(token->word, token->word[0]);
 }
 
 static void	split_expand(t_tokens **list, char *word)
 {
 	char	buffer[256];
-	char	**cmd;
-	int		j;
+	char	*curr;
+	char	*beg;
 
-	j = 0;
+	curr = buffer;
 	ft_memset(buffer, 0, 256);
 	ft_strcat(buffer, word);
-	quote_removal(buffer, buffer[0]);
-	cmd = ft_split(buffer, ' ');
-	manage_heap(CREATE_CMD, cmd);
-	while (!g_err && cmd[j])
+	quote_removal(buffer, *buffer);
+	while (!g_err && *curr)
 	{
-		manage_heap(CREATE_CMD, cmd[j]);
-		create_token(list, cmd[j], WORD, 0);
-		if (!g_err && cmd[j + 1])
-			create_token(list, " ", BLANK, 1);
-		++j;
+		beg = curr;
+		while (*curr && !ft_isspace(*curr))
+			++curr;
+		if (*curr)
+		{
+			while (*curr && ft_isspace(*curr))
+				*curr++ = 0;
+			create_token(list, beg, WORD);
+			create_token(list, " ", BLANK);
+		}
 	}
+	create_token(list, beg, WORD);
 }
 
 static void	word_splittin(t_tokens **list, t_tokens *tok, t_var *vars)
@@ -96,7 +98,7 @@ static void	word_splittin(t_tokens **list, t_tokens *tok, t_var *vars)
 	if (res && res->value && *res->value)
 		split_expand(&new, res->value);
 	else
-		create_token(&new, "", WORD, 1);
+		create_token(&new, "", WORD);
 	if (tok == (*list))
 		(*list) = new;
 	else

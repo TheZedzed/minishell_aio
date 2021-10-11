@@ -1,4 +1,5 @@
 #!/bin/sh
 cd minishell
-make re 
+make fclean
+make bonus 
 valgrind ./minishell

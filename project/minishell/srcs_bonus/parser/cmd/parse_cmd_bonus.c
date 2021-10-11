@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd.c                                              :+:      :+:    :+:   */
+/*   parse_cmd_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -100,6 +100,7 @@ void	parse_cmd(t_tokens *seq, t_cmd **head)
 			else
 				push_words((t_tokens **)&new->words, &seq, next);
 		}
+		heredoc_(new);
 		(*head) = new;
 	}
 }

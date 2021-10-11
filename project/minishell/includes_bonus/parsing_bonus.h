@@ -47,7 +47,7 @@ void			show_command(t_cmd *cmd);
 t_tokens		*last_token(t_tokens *token);
 char			*search_ainsi(char *str, int len);
 t_var			*search_var(t_var *head, char *name);
-void			create_token(t_tokens **list, char *word, int type, int flag);
+void			create_token(t_tokens **list, char *word, int type);
 
 /*
 **	EXPANSION

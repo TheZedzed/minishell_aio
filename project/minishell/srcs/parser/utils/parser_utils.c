@@ -12,7 +12,7 @@
 
 #include "parsing.h"
 
-void	create_token(t_tokens **list, char *word, int type, int flag)
+void	create_token(t_tokens **list, char *word, int type)
 {
 	t_tokens	*new;
 
@@ -21,13 +21,8 @@ void	create_token(t_tokens **list, char *word, int type, int flag)
 	if (new)
 	{
 		new->type = type;
-		if (flag)
-		{
-			new->word = ft_strdup(word);
-			manage_heap(CREATE_CMD, new->word);
-		}
-		else
-			new->word = word;
+		new->word = ft_strdup(word);
+		manage_heap(CREATE_CMD, new->word);
 		push_token(list, new);
 	}
 }
