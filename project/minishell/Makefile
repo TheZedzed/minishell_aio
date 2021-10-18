@@ -19,7 +19,7 @@ CPPFLAGS = -I./libft/include -I./includes
 LDFLAGS	:= -L./libft -L./usr/lib/x86_64-linux-gnu
 LDLIBS	:= -lft -lreadline
 FILES	:=	main lexer/lexer parser/parser \
-			lexer/lexer_err/lexer_err lexer/lexer_err/syntax_err lexer/lexer_err/syntaxb_err \
+			lexer/lexer_err/lexer_err lexer/lexer_err/syntax_err \
 			lexer/debug/debug lexer/debug/free lexer/debug/show_ast \
 			lexer/utils/tokenizer lexer/utils/lexer_utils lexer/utils/token_utils \
 			parser/ast/ast parser/ast/ast2 \

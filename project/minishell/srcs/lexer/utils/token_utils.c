@@ -12,6 +12,26 @@
 
 #include "lexing.h"
 
+int	posix_(char c)
+{
+	if (ft_isdigit(c) || ft_isalpha(c) || c == 0x5f)
+		return (1);
+	return (0);
+}
+
+int	is_posix(char *str)
+{
+	if (!(ft_isalpha(*str) || *str == 0x5f))
+		return (0);
+	while (*str && *str != 0x3d)
+	{
+		if (!posix_(*str))
+			return (0);
+		++str;
+	}
+	return (1);
+}
+
 void	create_token(t_tokens **list, char *word, int type)
 {
 	t_tokens	*new;
