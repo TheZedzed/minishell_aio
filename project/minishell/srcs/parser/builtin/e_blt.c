@@ -29,23 +29,23 @@ static int	exit_err(char *arg, char *err)
 	return (1);
 }
 
-static int	option(char **arg)
+static int	option(char **arg, int *index)
 {
 	int	opt;
 	int	i;
 	int	j;
 
-	i = 0;
+	i = -1;
 	opt = 0;
-	while (arg[i])
+	while (arg[++i])
 	{
 		if (*arg[i] == 0x2d)
 		{
 			j = 1;
 			while (arg[i][j] && arg[i][j] == 0x6e)
 				++j;
-			if (!arg[i][j] && ++opt && ++i)
-				arg = &arg[i];
+			if (!arg[i][j] && ++opt)
+				++(*index);
 		}
 		else
 			break ;
@@ -81,7 +81,7 @@ int	echo_(char **cmd)
 	int	i;
 
 	i = 0;
-	flag = option(cmd);
+	flag = option(cmd, &i);
 	while (cmd[i])
 	{
 		if (*cmd[i])
