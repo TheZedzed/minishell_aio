@@ -21,6 +21,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# define CD_ERR "cd: error retrieving current directory: getcwd: \
+cannot access parent directories: "
+
 extern int	g_err;
 
 typedef struct s_tokens {
@@ -39,7 +42,7 @@ typedef struct s_var {
 enum {LOCAL, GLOBAL
 };
 
-enum {BLANK, WORD, REDIR, CTRL1, CTRL2
+enum {BLANK, WORD, EXPAND, REDIR, CTRL1, CTRL2, ASSIGN,
 };
 
 enum {

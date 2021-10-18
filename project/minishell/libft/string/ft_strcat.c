@@ -19,16 +19,19 @@ char	*ft_strcat(char *dest, const char *src)
 
 	dst_len = 0;
 	src_len = 0;
-	while (dest[dst_len])
-		++dst_len;
-	if (src)
+	if (dest)
 	{
-		while (src[src_len])
+		while (dest[dst_len])
+			++dst_len;
+		if (src)
 		{
-			dest[dst_len + src_len] = src[src_len];
-			++src_len;
+			while (src[src_len])
+			{
+				dest[dst_len + src_len] = src[src_len];
+				++src_len;
+			}
+			dest[dst_len + src_len] = 0;
 		}
-		dest[dst_len + src_len] = 0;
 	}
 	return (dest);
 }

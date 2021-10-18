@@ -14,40 +14,29 @@
 
 static void	set_type(t_tokens *token)
 {
-	int	c;
+	char	*word;
+	int		len;
 
-	c = token->word[0];
-	if (c == 0x28 || c == 0x29)
+	word = token->word;
+	len = ft_strlen(word);
+	if (*word == 0x28 || *word == 0x29)
 		token->type = CTRL2;
-	else if (c == 0x26 || c == 0x3b || c == 0x7c)
+	else if (*word == 0x26 || *word == 0x3b || *word == 0x7c)
 		token->type = CTRL1;
-	else if (c == 0x3c || c == 0x3e)
+	else if (*word == 0x3c || *word == 0x3e)
 		token->type = REDIR;
-	else if (ft_isspace(c))
+	else if (ft_isspace(*word))
 		token->type = BLANK;
+	else if (*word == 0x24 && len > 1 && ++token->word)
+		token->type = EXPAND;
+	else if (!ft_strncmp(word, "\"$", 2) && len > 3)
+	{
+		token->word[len - 1] = 0;
+		token->word += 2;
+		token->type = EXPAND;
+	}
 	else
 		token->type = WORD;
-}
-
-static void	merge(t_tokens **head, t_tokens *list)
-{
-	t_tokens	*prev;
-	t_tokens	*curr;
-
-	if (!g_err)
-	{
-		prev = NULL;
-		curr = (*head);
-		while (curr->next)
-		{
-			prev = curr;
-			curr = curr->next;
-		}
-		if (prev)
-			prev->next = list;
-		else
-			(*head) = list;
-	}
 }
 
 static void	length(char *beg, int *len)
@@ -108,11 +97,11 @@ static void	rebuild(t_tokens **token, char *word)
 
 void	tokenizer(t_tokens **token, char *input)
 {
+	t_tokens	*curr;
 	t_tokens	*new;
 	int			len;
 
 	len = 0;
-	new = NULL;
 	while (!g_err && lexer(&input, &len))
 	{
 		new = ft_calloc(1, sizeof(t_tokens));
@@ -122,13 +111,15 @@ void	tokenizer(t_tokens **token, char *input)
 			push_token(token, new);
 			new->word = ft_strndup(input - len, len);
 			manage_heap(CREATE_WORD, new->word);
-			if (new->word)
-			{
-				set_type(new);
-				if (new->word[0] == 0x22 && ft_strlen(new->word) > 3)
-					rebuild(token, &new->word[1]);
-			}
+			if (new->word && new->word[0] == 0x22 && ft_strlen(new->word) > 3)
+				rebuild(token, &new->word[1]);
 		}
 		len = 0;
+	}
+	curr = *token;
+	while (curr)
+	{
+		set_type(curr);
+		curr = curr->next;
 	}
 }

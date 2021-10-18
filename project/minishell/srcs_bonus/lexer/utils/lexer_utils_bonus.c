@@ -12,24 +12,6 @@
 
 #include "lexing_bonus.h"
 
-void	push_token(t_tokens **head, t_tokens *new)
-{
-	t_tokens	*curr;
-
-	if (head)
-	{
-		if (!(*head))
-			(*head) = new;
-		else
-		{
-			curr = (*head);
-			while (curr->next)
-				curr = curr->next;
-			curr->next = new;
-		}
-	}
-}
-
 void	handler(int sig)
 {
 	if (sig == SIGINT)

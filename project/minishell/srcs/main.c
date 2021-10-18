@@ -58,13 +58,13 @@ static void	lexing(t_tokens **token, t_var **vars)
 		g_err = INPUT;
 	else
 	{
-		add_history(line);
+		if (*line)
+			add_history(line);
 		skip_blanks(&line);
 		if (!unclosed(line))
 		{
 			tokenizer(token, line);
 			syntax(token, vars);
-			syntaxb(token, vars);
 		}
 	}
 }
@@ -89,6 +89,6 @@ int	main(int ac, char **av, char **env)
 	}
 	g_err = ft_atoi(search_var(vars, "?")->value);
 	manage_heap(END, NULL);
-	write(2, "exit\n", 5);
+	write(2, "\nexit\n", 6);
 	return (g_err);
 }

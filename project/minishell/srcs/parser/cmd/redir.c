@@ -97,7 +97,7 @@ static void	apply_(char **redir, t_var *vars, int *stream, int *err)
 			while (*file == '<' || *file == '>')
 				++file;
 			curr->word = file;
-			expand(&curr, vars, 1);
+			expand(&curr, vars, WORD);
 			if ((curr->next || !curr->word) && ++*err)
 			{
 				write(2, file, ft_strlen(file));
@@ -119,7 +119,7 @@ char	make_redir(t_cmd *cmd, t_var *vars, int *new, int *old)
 		old[0] = cmd->heredoc;
 	new[0] = old[0];
 	new[1] = old[1];
-	red = cmd_words(cmd->redir, vars, 0);
+	red = cmd_words(cmd->redir, vars, REDIR);
 	if (red)
 		apply_(red, vars, new, &err);
 	return (err + '0');

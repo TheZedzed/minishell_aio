@@ -15,11 +15,19 @@
 static void	push_words(t_tokens **dest, t_tokens **curr, t_tokens *next)
 {
 	t_tokens	*tmp;
+	int			good;
 
 	tmp = (*dest);
 	while (tmp && tmp->next)
 		tmp = tmp->next;
-	if ((*curr)->type == WORD || ((*curr)->type == BLANK && tmp->type == WORD))
+	if ((*curr)->type == WORD || (*curr)->type == EXPAND)
+		good = 1;
+	else if ((*curr)->type == BLANK
+		&& (tmp->type == WORD || tmp->type == EXPAND))
+		good = 1;
+	else
+		good = 0;
+	if (good)
 	{
 		push_token(dest, (*curr));
 		(*curr)->next = NULL;
@@ -93,7 +101,7 @@ void	parse_cmd(t_tokens *seq, t_cmd **head)
 		while (seq)
 		{
 			next = seq->next;
-			if (ft_strchr(seq->word, '=') && !new->words)
+			if (!new->words && ft_strchr(seq->word, '=') && is_posix(seq->word))
 				push_assign((t_tokens **)&new->assign, &seq, next);
 			else if (seq->type == REDIR)
 				push_redir((t_tokens **)&new->redir, &seq, next);

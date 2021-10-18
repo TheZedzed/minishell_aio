@@ -12,39 +12,25 @@
 
 #include "parsing_bonus.h"
 
-void	create_token(t_tokens **list, char *word, int type)
+void	merge(t_tokens **head, t_tokens *list)
 {
-	t_tokens	*new;
+	t_tokens	*prev;
+	t_tokens	*curr;
 
-	new = ft_calloc(1, sizeof(t_tokens));
-	manage_heap(CREATE_CMD, new);
-	if (new)
+	if (!g_err)
 	{
-		new->type = type;
-		new->word = ft_strdup(word);
-		manage_heap(CREATE_CMD, new->word);
-		push_token(list, new);
+		prev = NULL;
+		curr = (*head);
+		while (curr->next)
+		{
+			prev = curr;
+			curr = curr->next;
+		}
+		if (prev)
+			prev->next = list;
+		else
+			(*head) = list;
 	}
-}
-
-t_tokens	*last_token(t_tokens *token)
-{
-	int	countl;
-	int	countr;
-
-	countl = 0;
-	countr = 0;
-	while (token)
-	{
-		if (!ft_strcmp(token->word, "("))
-			++countl;
-		else if (!ft_strcmp(token->word, ")"))
-			++countr;
-		if (countr == countl)
-			break ;
-		token = token->next;
-	}
-	return (token);
 }
 
 static void	push_var(t_var **head, t_var *new)
@@ -90,11 +76,8 @@ void	update_var(t_var **head, char *name, char *value, int scope)
 	if (curr)
 	{
 		curr->scope = scope;
-		if (*value && ft_strcmp(curr->value, value))
-		{
-			curr->value = ft_strdup(value);
-			manage_heap(CREATE_VAR, curr->value);
-		}
+		curr->value = ft_strdup(value);
+		manage_heap(CREATE_VAR, curr->value);
 	}
 	else
 	{

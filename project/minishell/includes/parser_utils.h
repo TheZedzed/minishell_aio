@@ -50,7 +50,7 @@ typedef struct s_ainsi
 	int		value;
 }t_ainsi;
 
-enum {OR, SUB, CMD, AND, PIPE
+enum {OR, SUB, CMD, AND, PIPE,
 };
 
 typedef struct stat	t_stat;

@@ -43,8 +43,7 @@ static void	should_cont(t_list *cmds, int *pipefd, int *stream)
 
 static int	is_blt(char **cmd)
 {
-	static char	*t[] = {"echo", "pwd", "unset", "env", "exit", "export", "cd",
-						NULL};
+	static char	*t[] = {"echo", "pwd", "unset", "exit", "export", "cd", NULL};
 	int			i;
 
 	i = 0;
@@ -64,8 +63,8 @@ static int	should_skip(t_ast *elem, int size, t_var **vars, int *stream)
 	if (elem->type == CMD)
 	{
 		cmd = elem->item;
-		cmd->words = cmd_words(cmd->words, *vars, 1);
-		cmd->assign = cmd_words(cmd->assign, *vars, 2);
+		cmd->words = cmd_words(cmd->words, *vars, WORD);
+		cmd->assign = cmd_words(cmd->assign, *vars, ASSIGN);
 		if (size == 1)
 		{
 			if (!cmd->words || (cmd->words && is_blt(cmd->words)))
@@ -74,7 +73,7 @@ static int	should_skip(t_ast *elem, int size, t_var **vars, int *stream)
 				if (!cmd->words && cmd->assign)
 					assign_(cmd->assign, vars, LOCAL);
 				else if (cmd->words && *err == '0')
-					builtin_(cmd->words, vars, new, err);
+					builtin_(cmd->words, vars, err);
 				update_var(vars, "?", err, LOCAL);
 				return (1);
 			}

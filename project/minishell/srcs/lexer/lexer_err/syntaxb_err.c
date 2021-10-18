@@ -19,27 +19,15 @@ int	posix_(char c)
 	return (0);
 }
 
-void	syntaxb(t_tokens **token, t_var **vars)
+int	is_posix(char *str)
 {
-	t_tokens	*curr;
-
-	curr = (*token);
-	if (g_err)
-		return ;
-	while (curr)
+	if (!(ft_isalpha(*str) || *str == 0x5f))
+		return (0);
+	while (*str && *str != 0x3d)
 	{
-		if (curr->type == WORD && !ft_strcmp(curr->word, "export"))
-		{
-			curr = curr->next;
-			if (curr->type == BLANK)
-				curr = curr->next;
-			if (curr && curr->type == WORD && *curr->word == '=')
-			{
-				g_err = SYNTAX;
-				printf("export: `%s': not a valid identifier\n", curr->word);
-				update_var(vars, "?", "1", LOCAL);
-			}
-		}
-		curr = curr->next;
+		if (!posix_(*str))
+			return (0);
+		++str;
 	}
+	return (1);
 }

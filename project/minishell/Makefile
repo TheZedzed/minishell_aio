@@ -21,11 +21,13 @@ LDLIBS	:= -lft -lreadline
 FILES	:=	main lexer/lexer parser/parser \
 			lexer/lexer_err/lexer_err lexer/lexer_err/syntax_err lexer/lexer_err/syntaxb_err \
 			lexer/debug/debug lexer/debug/free lexer/debug/show_ast \
-			lexer/utils/tokenizer lexer/utils/lexer_utils parser/ast/ast \
-			parser/ast/ast2 parser/builtin/builtin parser/builtin/builtin2 \
-			parser/cmd/parse_cmd parser/cmd/expand parser/cmd/redir parser/cmd/cmd \
+			lexer/utils/tokenizer lexer/utils/lexer_utils lexer/utils/token_utils \
+			parser/ast/ast parser/ast/ast2 \
+			parser/builtin/blt parser/builtin/e_blt parser/builtin/cd_blt \
+			parser/cmd/parse_cmd parser/cmd/expand parser/cmd/redir parser/cmd/cmd parser/cmd/stars \
 			parser/exec/executer parser/exec/pipex parser/exec/exec_cmd \
-			parser/env/env parser/env/search parser/utils/parser_utils
+			parser/env/env parser/env/search parser/env/assign \
+			parser/utils/parser_utils
 RM		:= rm -rf
 SRCS := $(addsuffix .c, $(addprefix srcs/, $(FILES)))
 SRCS_B := $(addsuffix _bonus.c, $(addprefix srcs_bonus/, $(FILES)))

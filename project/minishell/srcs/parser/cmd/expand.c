@@ -40,34 +40,33 @@ static void	quote_removal(char *str, int d)
 	}
 }
 
-static void	simple_expand(t_tokens *token, t_var *vars, int flag)
+static void	simple_expand(t_tokens *token, t_var *vars)
 {
 	t_var	*res;
+	char	*word;
 	int		len;
 
-	len = ft_strlen(token->word);
-	if (flag == 2)
-		res = search_var(vars, token->word + 1);
-	else
-	{
-		token->word[len - 1] = 0;
-		res = search_var(vars, token->word + 2);
-	}
+	word = token->word;
+	len = ft_strlen(word);
+	res = search_var(vars, word);
 	if (res)
+	{
 		token->word = ft_strdup(res->value);
+		manage_heap(CREATE_VAR, token->word);
+	}
 	else
-		ft_memset(token->word, 0, len);
-	quote_removal(token->word, token->word[0]);
+		ft_memset(word, 0, len);
+	quote_removal(token->word, *token->word);
 }
 
 static void	split_expand(t_tokens **list, char *word)
 {
-	char	buffer[256];
+	char	buffer[4096];
 	char	*curr;
 	char	*beg;
 
 	curr = buffer;
-	ft_memset(buffer, 0, 256);
+	ft_memset(buffer, 0, 4096);
 	ft_strcat(buffer, word);
 	quote_removal(buffer, *buffer);
 	while (!g_err && *curr)
@@ -86,7 +85,7 @@ static void	split_expand(t_tokens **list, char *word)
 	create_token(list, beg, WORD);
 }
 
-static void	word_splittin(t_tokens **list, t_tokens *tok, t_var *vars)
+static void	word_splitting(t_tokens **list, t_tokens *tok, t_var *vars)
 {
 	t_tokens	*curr;
 	t_tokens	*new;
@@ -94,7 +93,7 @@ static void	word_splittin(t_tokens **list, t_tokens *tok, t_var *vars)
 
 	new = NULL;
 	curr = (*list);
-	res = search_var(vars, tok->word + 1);
+	res = search_var(vars, tok->word);
 	if (res && res->value && *res->value)
 		split_expand(&new, res->value);
 	else
@@ -115,27 +114,22 @@ static void	word_splittin(t_tokens **list, t_tokens *tok, t_var *vars)
 
 void	expand(t_tokens **list, t_var *vars, int flag)
 {
-	t_tokens	*curr;
-	char		*word;
+	t_tokens	*tok;
 	int			len;
 
-	len = 0;
-	word = NULL;
-	curr = *list;
-	while (curr)
+	tok = *list;
+	stars_(list);
+	while (tok)
 	{
-		word = curr->word;
-		len = ft_strlen(word);
-		if (!ft_strncmp(word, "$\'", 2))
-			search_ainsi(word, len);
-		else if (!ft_strncmp(word, "\"$", 2) && len > 3)
-			simple_expand(curr, vars, flag);
-		else if (*word == 0x24 && flag == 2 && len > 3)
-			simple_expand(curr, vars, flag);
-		else if (*word == 0x24 && len > 1)
-			word_splittin(list, curr, vars);
+		len = ft_strlen(tok->word);
+		if (!ft_strncmp(tok->word, "$\'", 2))
+			search_ainsi(tok->word, len);
+		else if (tok->type == EXPAND && flag != ASSIGN)
+			word_splitting(list, tok, vars);
+		else if (tok->type == EXPAND && flag == ASSIGN)
+			simple_expand(tok, vars);
 		else
-			quote_removal(word, word[0]);
-		curr = curr->next;
+			quote_removal(tok->word, *tok->word);
+		tok = tok->next;
 	}
 }

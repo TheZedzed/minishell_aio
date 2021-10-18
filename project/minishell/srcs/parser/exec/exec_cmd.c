@@ -81,13 +81,13 @@ void	exec_cmd(void *todo, t_var **vars, int *stream)
 	err = make_redir(elem, *vars, new, stream);
 	if (err == '0' && cmd)
 	{
-		if (!builtin_(cmd, vars, new, &err))
+		if (!builtin_(cmd, vars, &err))
 		{
 			dup2(new[0], STDIN_FILENO);
 			dup2(new[1], STDOUT_FILENO);
-			if (**cmd && **cmd != 0x2f && search_var(*vars, "PATH"))
+			if (**cmd != 0x2f && search_var(*vars, "PATH"))
 				search_path(cmd, search_var(*vars, "PATH")->value);
-			if (execve(cmd[0], cmd, update_env(*vars)))
+			if (execve(cmd[0], cmd, update_env(*vars, 0)))
 				not_found(cmd[0]);
 		}
 	}

@@ -12,60 +12,19 @@
 
 #include "parsing.h"
 
-int	exit_(char *value)
+static int	pwd_(void)
 {
-	int	res;
+	char	buffer[4096];
 
-	res = 0;
-	if (value)
-		res = ft_atoi(value);
-	manage_heap(END, NULL);
-	exit(res % 256);
-}
-
-int	echo_(char **cmd, int *stream)
-{
-	int	flag;
-	int	i;
-
-	i = 0;
-	flag = 0;
-	if (*cmd)
-	{
-		if (!ft_strcmp(cmd[i], "-n") && ++i)
-			flag = 1;
-		while (cmd[i])
-		{
-			write(stream[1], cmd[i], ft_strlen(cmd[i]));
-			if (cmd[i][0] && cmd[i + 1])
-				write(stream[1], " ", 1);
-			++i;
-		}
-	}
-	if (!flag)
-		write(stream[1], "\n", 1);
-	return (1);
-}
-
-int	pwd_(t_var **vars, int *stream, char *err)
-{
-	t_var	*res;
-
-	res = search_var(*vars, "PWD");
-	if (res)
-	{
-		write(stream[1], res->value, ft_strlen(res->value));
-		write(stream[1], "\n", 1);
-	}
+	ft_memset(buffer, 0, 4096);
+	if (getcwd(buffer, 4095))
+		printf("%s\n", buffer);
 	else
-	{
-		write(2, "PWD not set\n", 12);
-		*err = '1';
-	}
+		perror(CD_ERR);
 	return (1);
 }
 
-int	unset_(char **cmd, t_var **vars)
+static int	unset_(char **cmd, t_var **vars)
 {
 	t_var	*prev;
 	t_var	*curr;
@@ -87,21 +46,48 @@ int	unset_(char **cmd, t_var **vars)
 	return (1);
 }
 
-int	env_(t_var **vars, int flag)
+static int	export_(char **arg, t_var **vars, char *err)
 {
-	t_var	*curr;
+	char	*res;
+	int		i;
 
-	curr = *vars;
-	while (curr)
+	if (!*arg)
 	{
-		if (curr->scope == GLOBAL)
+		i = -1;
+		arg = update_env(*vars, 1);
+		while (arg[++i])
+			printf("declare -x %s\n", arg[i]);
+	}
+	else
+	{
+		res = assign_(arg, vars, GLOBAL);
+		if (res)
 		{
-			if (flag)
-				printf("declare -x %s=\"%s\"\n", curr->name, curr->value);
-			else if (*curr->value)
-				printf("%s=%s\n", curr->name, curr->value);
+			*err = '1';
+			write(2, "export: `", 9);
+			write(2, res, ft_strlen(res));
+			write(2, "\': not a valid identifier\n", 26);
 		}
-		curr = curr->next;
 	}
 	return (1);
+}
+
+int	builtin_(char **cmd, t_var **vars, char *err)
+{
+	char	*name;
+
+	name = cmd[0];
+	if (!ft_strcmp(name, "export"))
+		return (export_(cmd + 1, vars, err));
+	else if (!ft_strcmp(name, "cd"))
+		return (cd_(cmd + 1, vars, err));
+	else if (!ft_strcmp(name, "pwd"))
+		return (pwd_());
+	else if (!ft_strcmp(name, "echo"))
+		return (echo_(cmd + 1));
+	else if (!ft_strcmp(name, "unset"))
+		return (unset_(cmd + 1, vars));
+	else if (!ft_strcmp(name, "exit"))
+		return (exit_(cmd + 1, err));
+	return (0);
 }

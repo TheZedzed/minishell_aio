@@ -44,30 +44,27 @@ void			show_command(t_cmd *cmd);
 /*
 **	UTILS
 */
-t_tokens		*last_token(t_tokens *token);
 char			*search_ainsi(char *str, int len);
 t_var			*search_var(t_var *head, char *name);
-void			create_token(t_tokens **list, char *word, int type);
 
 /*
 **	EXPANSION
 */
+void			stars_(t_tokens **token);
 void			expand(t_tokens **list, t_var *vars, int flag);
 
 /*
 **	ENV
 */
-char			**update_env(t_var *vars);
-int				assign_(char **cmd, t_var **vars, int scope);
+char			**update_env(t_var *vars, int empty);
+char			*assign_(char **cmd, t_var **vars, int scope);
 
 /*
 **	BUILTIN
 */
-int				exit_(char *value);
-int				echo_(char **cmd, int *stream);
-int				env_(t_var **vars, int flag);
-int				unset_(char **names, t_var **vars);
-int				cd_(char *path, t_var **vars, char *err);
-int				pwd_(t_var **vars, int *stream, char *err);
-int				builtin_(char **cmd, t_var **vars, int *stream, char *err);
+
+int				echo_(char **arg);
+int				exit_(char **arg, char *err);
+int				cd_(char **arg, t_var **vars, char *err);
+int				builtin_(char **cmd, t_var **vars, char *err);
 #endif
