@@ -32,25 +32,31 @@ static void	simple_(char *type, char *file, int *stream, int *err)
 
 static void	read_(char *file, char *delim, int *fd)
 {
-	char	*line;
-	int		res;
+	char		*new;
+	struct stat	s;
+	int			i;
 
+	g_err = HERE;
+	i = dup(STDIN_FILENO);
 	*fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0660);
 	while (42)
 	{
-		res = get_next_line(STDIN_FILENO, &line);
-		if (!res || !ft_strcmp(line, delim))
-		{
-			free(line);
+		new = readline("heredoc>");
+		manage_heap(HERE, new);
+		if (fstat(STDIN_FILENO, &s) < 0 && !close(*fd) && !unlink(file)
+			&& !dup2(i, STDIN_FILENO))
+			return ;
+		else if (!new || !ft_strcmp(new, delim))
 			break ;
-		}
-		write(*fd, line, ft_strlen(line));
+		write(*fd, new, ft_strlen(new));
 		write(*fd, "\n", 1);
-		free(line);
 	}
+	if (!new)
+		write(2, "\nwarning: here-document delimited by end-of-file\n", 49);
 	close(*fd);
 	*fd = open(file, O_CLOEXEC | O_RDONLY);
 	unlink(file);
+	g_err = 0;
 }
 
 void	heredoc_(t_cmd *cmd)

@@ -49,7 +49,8 @@ static void	push_assign(t_tokens **dest, t_tokens **curr, t_tokens *next)
 		while ((*curr))
 		{
 			next = (*curr)->next;
-			if ((*curr)->type == WORD || (*curr)->type == BLANK)
+			if ((*curr)->type == WORD || (*curr)->type == EXPAND
+				|| (*curr)->type == BLANK)
 			{
 				tmp = next;
 				push_token(dest, (*curr));
@@ -98,6 +99,7 @@ void	parse_cmd(t_tokens *seq, t_cmd **head)
 	manage_heap(CREATE_CMD, new);
 	if (new)
 	{
+		new->heredoc = -1;
 		while (seq)
 		{
 			next = seq->next;

@@ -27,7 +27,7 @@ static void	set_type(t_tokens *token)
 		token->type = REDIR;
 	else if (ft_isspace(*word))
 		token->type = BLANK;
-	else if ((*word == 0x24 && len > 1 && ++token->word) || *word == 0x2a)
+	else if (*word == 0x24 && len > 1 && ++token->word)
 		token->type = EXPAND;
 	else if (!ft_strncmp(word, "\"$", 2) && len > 3)
 	{

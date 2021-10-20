@@ -46,6 +46,7 @@ enum {BLANK, WORD, EXPAND, REDIR, CTRL1, CTRL2, ASSIGN,
 };
 
 enum {
+	HERE = -5,
 	SYNTAX = -4,
 	FEATURE = -3,
 	UNCLOSED = -2,

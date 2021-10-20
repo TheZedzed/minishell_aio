@@ -16,6 +16,8 @@ void	handler(int sig)
 {
 	if (sig == SIGINT)
 	{
+		if (g_err == HERE && printf("\n") && !close(STDIN_FILENO))
+			return ;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
