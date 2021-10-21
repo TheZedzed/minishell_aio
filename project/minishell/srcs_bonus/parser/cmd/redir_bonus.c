@@ -43,8 +43,7 @@ static void	read_(char *file, char *delim, int *fd)
 	{
 		new = readline("heredoc>");
 		manage_heap(HERE, new);
-		if (fstat(STDIN_FILENO, &s) < 0 && !close(*fd) && !unlink(file)
-			&& !dup2(i, STDIN_FILENO))
+		if (fstat(STDIN_FILENO, &s) < 0 && !dup2(i, STDIN_FILENO))
 			return ;
 		else if (!new || !ft_strcmp(new, delim))
 			break ;
@@ -53,7 +52,6 @@ static void	read_(char *file, char *delim, int *fd)
 	}
 	if (!new)
 		write(2, "\nwarning: here-document delimited by end-of-file\n", 49);
-	close(*fd);
 	*fd = open(file, O_CLOEXEC | O_RDONLY);
 	unlink(file);
 	g_err = 0;

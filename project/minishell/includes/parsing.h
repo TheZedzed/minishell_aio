@@ -57,7 +57,7 @@ void			expand(t_tokens **list, t_var *vars, int flag);
 **	ENV
 */
 char			**update_env(t_var *vars, int empty);
-char			*assign_(char **cmd, t_var **vars, int scope);
+int				assign_(char **cmd, t_var **vars, int scope);
 
 /*
 **	BUILTIN

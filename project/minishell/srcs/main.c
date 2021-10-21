@@ -73,6 +73,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_tokens	*token;
 	t_var		*vars;
+	int			i;
 
 	(void)ac;
 	(void)av;
@@ -82,10 +83,13 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (g_err <= 0)
 	{
+		i = 2;
 		g_err = 0;
 		token = NULL;
 		lexing(&token, &vars);
 		parsing(&token, &vars);
+		while (++i < 1024)
+			close(i);
 	}
 	g_err = ft_atoi(search_var(vars, "?")->value);
 	manage_heap(END, NULL);

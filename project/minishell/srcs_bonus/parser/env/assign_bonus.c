@@ -41,9 +41,9 @@ static void	global_(t_var **vars, char *name, char *value)
 	{
 		*value = 0;
 		if (res && !*(value + 1))
-			update_var(vars, res->name, "", GLOBAL);
+			update_var(vars, res->name, "=", GLOBAL);
 		else if (!res && !*(value + 1))
-			update_var(vars, name, "", GLOBAL);
+			update_var(vars, name, "=", GLOBAL);
 		else if (res && *(value + 1))
 			update_var(vars, res->name, value + 1, GLOBAL);
 		else if (!res && *(value + 1))
@@ -51,12 +51,14 @@ static void	global_(t_var **vars, char *name, char *value)
 	}
 }
 
-char	*assign_(char **cmd, t_var **vars, int scope)
+int	assign_(char **cmd, t_var **vars, int scope)
 {
 	char	*res;
+	int		err;
 	int		i;
 
 	i = -1;
+	err = 0;
 	while (cmd[++i])
 	{
 		if (is_posix(cmd[i]))
@@ -68,7 +70,12 @@ char	*assign_(char **cmd, t_var **vars, int scope)
 				local_(vars, cmd[i], res);
 		}
 		else
-			return (cmd[i]);
+		{
+			err = 1;
+			write(2, "export: `", 9);
+			write(2, cmd[i], ft_strlen(cmd[i]));
+			write(2, "\': not a valid identifier\n", 26);
+		}
 	}
-	return (NULL);
+	return (err);
 }

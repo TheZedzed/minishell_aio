@@ -98,12 +98,12 @@ char	**update_env(t_var *vars, int export)
 		if (vars->scope == GLOBAL && ((*vars->value && !export) || export))
 		{
 			ft_strcat(tab[++i], vars->name);
-			if (*vars->value)
+			if (*vars->value && ft_strcat(tab[i], "="))
 			{
-				ft_strcat(tab[i], "=");
 				if (export)
 					ft_strcat(tab[i], "\"");
-				ft_strcat(tab[i], vars->value);
+				if (ft_strcmp(vars->value, "="))
+					ft_strcat(tab[i], vars->value);
 				if (export)
 					ft_strcat(tab[i], "\"");
 			}	

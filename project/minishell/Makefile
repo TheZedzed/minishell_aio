@@ -6,7 +6,7 @@
 #    By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/19 11:42:25 by azeraoul          #+#    #+#              #
-#    Updated: 2021/10/06 18:32:14 by azeraoul         ###   ########.fr        #
+#    Updated: 2021/10/21 20:17:44 by azeraoul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 #-fsanitize=memory -fPIE -pie
 NAME	:= minishell
 CC		:= gcc 
-CFLAGS	:= -g -Werror -Wextra -Wall
+CFLAGS	:= -Werror -Wextra -Wall
 CPPFLAGS = -I./libft/include -I./includes
 LDFLAGS	:= -L./libft -L./usr/lib/x86_64-linux-gnu
 LDLIBS	:= -lft -lreadline

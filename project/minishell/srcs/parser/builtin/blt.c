@@ -48,8 +48,7 @@ static int	unset_(char **cmd, t_var **vars)
 
 static int	export_(char **arg, t_var **vars, char *err)
 {
-	char	*res;
-	int		i;
+	int	i;
 
 	if (!*arg)
 	{
@@ -59,16 +58,7 @@ static int	export_(char **arg, t_var **vars, char *err)
 			printf("declare -x %s\n", arg[i]);
 	}
 	else
-	{
-		res = assign_(arg, vars, GLOBAL);
-		if (res)
-		{
-			*err = '1';
-			write(2, "export: `", 9);
-			write(2, res, ft_strlen(res));
-			write(2, "\': not a valid identifier\n", 26);
-		}
-	}
+		*err = assign_(arg, vars, GLOBAL) + 48;
 	return (1);
 }
 
