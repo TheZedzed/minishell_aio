@@ -31,7 +31,8 @@ static char	*stat_cmd(char *src, char *path)
 
 	ft_memset(buffer, 0, 4096);
 	ft_strcat(buffer, path);
-	ft_strcat(buffer, "/");
+	if (path[ft_strlen(path) - 1] != '/')
+		ft_strcat(buffer, "/");
 	ft_strcat(buffer, src);
 	if (!stat(buffer, &info) && (info.st_mode & S_IFMT) == S_IFREG)
 	{
@@ -85,9 +86,11 @@ void	exec_cmd(void *todo, t_var **vars, int *stream)
 		{
 			dup2(new[0], STDIN_FILENO);
 			dup2(new[1], STDOUT_FILENO);
-			if (**cmd != 0x2f && search_var(*vars, "PATH"))
+			if (!ft_strchr(cmd[0], 0x2f) && search_var(*vars, "PATH"))
 				search_path(cmd, search_var(*vars, "PATH")->value);
-			if (execve(cmd[0], cmd, update_env(*vars, 0)))
+			if (!ft_strchr(cmd[0], 0x2f))
+				not_found(cmd[0]);
+			else if (execve(cmd[0], cmd, update_env(*vars, 0)))
 				not_found(cmd[0]);
 		}
 	}
