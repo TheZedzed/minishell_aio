@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:44:46 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/09/26 13:53:19 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/08/19 22:17:22 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 
 int			g_err = 0;
 
-static void	create_vars(t_var **head, char **env)
+/*
+** Minishell env
+*/
+static void	create_env(t_var **head, char **env)
 {
 	char	*res;
 	int		i;
@@ -31,6 +34,9 @@ static void	create_vars(t_var **head, char **env)
 	update_var(head, "?", "0", LOCAL);
 }
 
+/*
+** Create AST then execute it
+*/
 static void	parsing(t_tokens **token, t_var **vars)
 {
 	t_ast	*todo;
@@ -48,11 +54,16 @@ static void	parsing(t_tokens **token, t_var **vars)
 	}
 }
 
+/*
+** Read input line
+** Add to history
+** Check line syntax
+*/
 static void	lexing(t_tokens **token, t_var **vars)
 {
 	char	*line;
 
-	line = readline(">");
+	line = readline("zZz-minishell>");
 	manage_heap(INPUT, line);
 	if (!line)
 		g_err = INPUT;
@@ -64,7 +75,7 @@ static void	lexing(t_tokens **token, t_var **vars)
 		if (!unclosed(line))
 		{
 			tokenizer(token, line);
-			syntax(token, vars);
+			syntax(token, vars);	
 		}
 	}
 }
@@ -73,23 +84,22 @@ int	main(int ac, char **av, char **env)
 {
 	t_tokens	*token;
 	t_var		*vars;
-	int			i;
 
 	(void)ac;
 	(void)av;
 	vars = NULL;
-	create_vars(&vars, env);
+	create_env(&vars, env);
 	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (g_err <= 0)
 	{
-		i = 2;
 		g_err = 0;
 		token = NULL;
 		lexing(&token, &vars);
 		parsing(&token, &vars);
-		while (++i < 1024)
+		for (int i = 3; i < MAX_FD; ++i)
 			close(i);
+		manage_heap(CLR, NULL);
 	}
 	g_err = ft_atoi(search_var(vars, "?")->value);
 	manage_heap(END, NULL);

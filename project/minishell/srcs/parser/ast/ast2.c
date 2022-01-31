@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ast_utils.c                                        :+:      :+:    :+:   */
+/*   ast2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:43:47 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/07/28 01:43:48 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/08/19 22:50:26 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
+
+/*
+** Structure for AST
+** allocation and initialization
+*/
 
 t_ast	*tree(int type, void *item)
 {

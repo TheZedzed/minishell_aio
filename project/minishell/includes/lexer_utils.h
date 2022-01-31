@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 18:58:16 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/08/29 16:55:07 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/08/29 16:55:34 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ cannot access parent directories: "
 
 extern int	g_err;
 
+/* token structure */
 typedef struct s_tokens {
 	int				type;
 	char			*word;
 	struct s_tokens	*next;
 }t_tokens;
 
+/* minishell variable structure */
 typedef struct s_var {
 	int				scope;
 	char			*name;
@@ -39,19 +41,20 @@ typedef struct s_var {
 	struct s_var	*next;
 }t_var;
 
-enum {LOCAL, GLOBAL
-};
+/* variable scope */
+enum {LOCAL, GLOBAL};
 
-enum {BLANK, WORD, EXPAND, REDIR, CTRL1, CTRL2, ASSIGN,
-};
+/* tokens type flag */
+enum {BLANK, WORD, EXPAND, REDIR, CTRL1, CTRL2, ASSIGN};
 
+/* manage memory flag */
+enum {CLR, END};
+
+/* low errors code */
+enum {HERE = -5, SYNTAX = -4, FEATURE = -3, UNCLOSED = -2, INPUT_ERR = -1};
+
+/* big errors code */
 enum {
-	HERE = -5,
-	SYNTAX = -4,
-	FEATURE = -3,
-	UNCLOSED = -2,
-	INPUT_ERR = -1,
-	END = 0,
 	SAVER = 1,
 	INPUT = 2,
 	CREATE_TOK = 3,

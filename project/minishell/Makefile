@@ -13,9 +13,9 @@
 #-fsanitize=address -fsanitize=leak -fno-omit-frame-pointer
 #-fsanitize=memory -fPIE -pie
 NAME	:= minishell
-CC		:= gcc 
+CC	:= gcc 
 CFLAGS	:= -Werror -Wextra -Wall
-CPPFLAGS = -I./libft/include -I./includes
+CPPFLAGS = -I./libft/include -I./includes -D MAX_FD=256
 LDFLAGS	:= -L./libft -L./usr/lib/x86_64-linux-gnu
 LDLIBS	:= -lft -lreadline
 FILES	:=	main lexer/lexer parser/parser \
@@ -28,24 +28,13 @@ FILES	:=	main lexer/lexer parser/parser \
 			parser/exec/executer parser/exec/pipex parser/exec/exec_cmd \
 			parser/env/env parser/env/search parser/env/assign \
 			parser/utils/parser_utils
-RM		:= rm -rf
-SRCS := $(addsuffix .c, $(addprefix srcs/, $(FILES)))
-SRCS_B := $(addsuffix _bonus.c, $(addprefix srcs_bonus/, $(FILES)))
-OBJS := $(SRCS:.c=.o)
-OBJS_B := $(SRCS_B:.c=.o)
+RM	:= rm -rf
+SRCS	:= $(addsuffix .c, $(addprefix srcs/, $(FILES)))
+OBJS	:= $(SRCS:.c=.o)
 
-ifeq ($(BONUS), 1)
-	CPPFLAGS = -I./libft/include -I./includes_bonus
-	SRCS = $(SRCS_B)
-	OBJS = $(OBJS_B)
-endif
-
-.Phony: all re clean fclean bonus
+.Phony: all re clean fclean
 
 all: $(NAME)
-
-bonus:
-	make BONUS=1
 
 $(NAME): $(OBJS)
 	make --silent -C ./libft
@@ -56,7 +45,7 @@ $(NAME): $(OBJS)
 
 clean:
 	make clean --silent -C ./libft
-	$(RM) $(OBJS) $(OBJS_B)
+	$(RM) $(OBJS)
 
 fclean: clean
 	make fclean --silent -C ./libft

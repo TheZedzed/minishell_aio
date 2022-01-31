@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd.c                                              :+:      :+:    :+:   */
+/*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -90,6 +90,11 @@ static void	push_redir(t_tokens **dest, t_tokens **curr, t_tokens *next)
 	(*curr) = next;
 }
 
+/*
+** Create cmd
+** cmd: word tokens + assign tokens + redirection tokens
+** treat heredoc in this step
+*/
 void	parse_cmd(t_tokens *seq, t_cmd **head)
 {
 	t_tokens	*next;

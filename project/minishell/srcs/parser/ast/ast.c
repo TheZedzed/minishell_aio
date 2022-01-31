@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:43:57 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/07/28 01:43:58 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/08/19 22:50:07 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ static t_ast	*simple_cmd(t_tokens **tokens)
 	return (tree(CMD, cmd));
 }
 
+/*
+** Create pipelines.
+** composed of simple command and/or compond command
+*/
 static t_ast	*pipelines(t_tokens **token)
 {
 	t_list	*seq;
@@ -73,6 +77,29 @@ static t_ast	*pipelines(t_tokens **token)
 	return (tree(PIPE, pipe_seq(seq)));
 }
 
+/*
+** Build AST composed of AND lists/ OR lists:
+** left-sassiocitivity execution
+** construct lists: last(last-1(last-2)) .. => recursive
+**
+** a | b | (c || d) | e && f || (g && h) | i && j
+** AST ==> AND(OR(AND(PIPE(a, b, CMP(OR(c, d)), e), f), PIPE(CMP(AND(g, h)), i)), j)
+**
+** a && b | c || d
+** AST ==> OR(AND(a, PIPE(b, c)), d)
+**
+** a && b && c && d
+** AST ==> AND(AND(AND(a, b), c), d)
+**
+** a | b | c && d
+** AST ==> AND(PIPE(a, b, c), d)
+**
+** a | b | c
+** AST ==> PIPE(a, b, c)
+**
+** a || b | c && d
+** AST ==> AND(OR(a, PIPE(b, c)), d)
+*/
 t_ast	*and_or(t_tokens **cmds, int index)
 {
 	t_ast	*left;

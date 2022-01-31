@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 19:00:37 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/10/05 12:52:56 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/08/06 19:00:38 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ static void	one(t_tokens **list, char **cmd, int *index)
 	++*index;
 }
 
+/*
+** Transform list of token to char**
+** expand them
+** token: word + type
+*/
 char	**cmd_words(t_tokens *list, t_var *vars, int flag)
 {
 	char	**cmd;

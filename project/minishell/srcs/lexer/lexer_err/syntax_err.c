@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_err.c                                       :+:      :+:    :+:   */
+/*   syntax_err.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:44:25 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/10/01 18:37:08 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/10/05 10:19:06 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	unsupported(char *str)
 {
-	static char	*cntrl[] = {"|", NULL};
-	static char	*redir[] = {"<", "<<", ">>", ">", NULL};
+	static char	*cntrl[] = {"&&", "|", "||", "(", ")", NULL};
+	static char	*redir[] = {"<", "<<", ">", ">>", NULL};
 	int			res;
 	int			i;
 
@@ -62,14 +62,28 @@ static void	err_msg(t_tokens *curr, t_var **vars)
 static void	syntax_cntrl(t_tokens *curr, t_tokens *prev)
 {
 	char	*str;
+	int		type;
 
 	str = curr->word;
+	type = curr->type;
 	if (unsupported(str))
 		g_err = FEATURE;
-	else if (!prev || prev->type == CTRL1)
-		g_err = SYNTAX;
-	else if (!curr->next)
-		g_err = UNCLOSED;
+	else
+	{
+		if (type == CTRL1)
+		{
+			if (!prev || prev->type == CTRL1 || !ft_strcmp(prev->word, "("))
+				g_err = SYNTAX;
+			else if (!curr->next)
+				g_err = UNCLOSED;
+		}
+		else if (!ft_strcmp(str, "(") && prev && (prev->type == WORD
+				|| !ft_strcmp(prev->word, "(")))
+			g_err = FEATURE;
+		else if (!ft_strcmp(str, ")") && prev
+			&& (prev->type == CTRL1 || !ft_strcmp(prev->word, "(")))
+			g_err = SYNTAX;
+	}
 }
 
 static void	syntax_redir(t_tokens *curr)
@@ -93,6 +107,9 @@ static void	syntax_redir(t_tokens *curr)
 	}
 }
 
+/*
+** Chex tokens syntax rule
+*/
 void	syntax(t_tokens **token, t_var **vars)
 {
 	t_tokens	*curr;
@@ -106,6 +123,8 @@ void	syntax(t_tokens **token, t_var **vars)
 			syntax_redir(curr);
 		else if (curr->type == CTRL1 || curr->type == CTRL2)
 			syntax_cntrl(curr, prev);
+		else if (curr->type == WORD && prev && !ft_strcmp(prev->word, ")"))
+			g_err = SYNTAX;
 		if (curr->type != BLANK)
 			prev = curr;
 		if (g_err)

@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 01:44:11 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/10/05 12:41:10 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/07/28 01:44:12 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,11 @@ static int	lexe_metach(char **beg, int *len)
 	return (lexer(beg, len));
 }
 
+/*
+** lexing rule (bash)
+** Return a len
+** can create a token of that len 
+*/
 int	lexer(char **beg, int *len)
 {
 	int	res;

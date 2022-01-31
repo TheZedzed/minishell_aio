@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   tokenizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -66,6 +66,9 @@ static void	length(char *beg, int *len)
 	*len = ptr - beg;
 }
 
+/*
+** Rebuild DQUOTED token for expansion facility
+*/
 static void	rebuild(t_tokens **token, char *word)
 {
 	t_tokens	*item;
@@ -95,6 +98,9 @@ static void	rebuild(t_tokens **token, char *word)
 	merge(token, new);
 }
 
+/*
+** Create tokens
+*/
 void	tokenizer(t_tokens **token, char *input)
 {
 	t_tokens	*curr;

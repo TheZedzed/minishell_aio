@@ -38,6 +38,10 @@ static void	reverse_cmds(t_tokens **cmds)
 		swap_cmds(&cmds[i], &cmds[size]);
 }
 
+/*
+** Create a list: sequence of one or more pipelines
+** compound commands are treated like simple command
+*/
 static void	pipelines_cmd(t_tokens **list, t_tokens **cmds, int *index)
 {
 	t_tokens	*last;
@@ -64,6 +68,9 @@ static void	pipelines_cmd(t_tokens **list, t_tokens **cmds, int *index)
 	}
 }
 
+/*
+** Split tokens in lists separated by one of the operator: && or ||
+*/
 static void	separe_cmds(t_tokens **cmds, t_tokens **list)
 {
 	t_tokens	*new;
@@ -89,6 +96,12 @@ static void	separe_cmds(t_tokens **cmds, t_tokens **list)
 	}
 }
 
+/*
+** 30 lists in this demo (cmds)
+** reverse: AST will be build recursively
+** (from the end to the beginning)
+** create and return AST
+*/
 t_ast	*parser(t_tokens **token)
 {
 	t_ast		*ast;

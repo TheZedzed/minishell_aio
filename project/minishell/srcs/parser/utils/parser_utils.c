@@ -6,7 +6,7 @@
 /*   By: azeraoul <azeraoul@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 19:19:49 by azeraoul          #+#    #+#             */
-/*   Updated: 2021/08/29 03:33:06 by azeraoul         ###   ########.fr       */
+/*   Updated: 2021/08/29 16:50:11 by azeraoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ static t_var	*create_var(char *name, char *value, int scope)
 	return (new);
 }
 
+/*
+** Create or update minishell variable
+** variable: name + value + scope
+*/
 void	update_var(t_var **head, char *name, char *value, int scope)
 {
 	t_var	*curr;

@@ -99,6 +99,7 @@ static void	unclosed_slash(char *beg, int *c)
 	}
 }
 
+/* Check for unclosed metachar */
 int	unclosed(char *beg)
 {
 	int	c;
