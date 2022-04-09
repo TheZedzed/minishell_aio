@@ -1,4 +1,4 @@
-# Minishell: [![jaeskim's 42Project Score](https://badge42.herokuapp.com/api/project/azeraoul/minishell)](https://github.com/thezedzed/minishell_aio) <br>
+# Minishell: [![azeraoul's 42 minishell Score](https://badge42.vercel.app/api/v2/cl1rl7l1g002509jpt6ryce3j/project/2310051)](https://github.com/JaeSeoKim/badge42) <br>
 > simple bash in c
 
 ### CONTENT:
